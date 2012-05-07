@@ -8,7 +8,9 @@ output
 *.pyc
 *.pyo
 .*.sw?
-*.py~
+*~
+*.bak
+GNUmakefile
 
 .idea
 /stdlib
