@@ -29,7 +29,7 @@ Wiki: https://github.com/pyjs/pyjs/wiki
 General source rules
 --------------------
 
-* obey PEP8 where it's sensible to do so.  there's a program called
+* obey PEP8 where it's sensible to do so. There's a program called
   pep8.py which automatically checks stuff. Follow this with the
   following exceptions:
 
@@ -52,10 +52,10 @@ General source rules
 UI source development
 +++++++++++++++++++++
 
-* Follow GWT source code as closely as possible.  Make use of
+* Follow GWT source code as closely as possible. Make use of
   java2py.py (in contrib) to do 95% of the conversion work for
   you. Don't just follow the GWT API: do **literally** "blindly"
-  follow the GWT source code, trusting it pretty much 100%.  *Don't*
+  follow the GWT source code, trusting it pretty much 100%. **Don't**
   try to second-guess it; **don't** try to "rework it"; in fact,
   **don't think at all**: just "go with the flow".  The reason is
   simple: the GWT team have far more resources than we do, and if you
@@ -206,9 +206,14 @@ documentation of the process *without* the gitflow extension, so it
 often shows multiple commands especially for merging and deleting
 temporary branches.
 
-Installation instruction for gitflow can be found on github:
-https://github.com/nvie/gitflow/wiki/Installation for OS X, Linux and
-Windows.
+There is a python version of gitflow which you can install with::
+
+   pip install -e git://github.com/htgoebel/gitflow.git@feature/python-rewrite#egg=gitflow
+
+The the original bash based version has install instructions for
+Linux, OSX and Windows::
+
+  https://github.com/nvie/gitflow/wiki/Installation
 
 Checking out and preparing your repository
 ++++++++++++++++++++++++++++++++++++++++++
@@ -217,13 +222,16 @@ Checkout the repository from github::
 
   git clone git@github.com:<your github name or pyjs>/pyjs.git
   cd pyjs
+  # initialize git flow
   python setupgit.py
+  # needs to be done only once per repository, not per branch switch
+  python bootstrap.py
 
 If this is on your fresh fork of pyjs on github, you should push the
 development branch using ``git push origin develop``
 
-Working on a feature or bug
-++++++++++++++++++++++++++++
+Working on a feature
+++++++++++++++++++++
 
 To start working on a feature use the command::
 
@@ -239,6 +247,12 @@ any changed python sources and do a final commit using::
 
 This merges the feature back into the development branch and deletes
 the branch short_name_for_your_feature.
+
+If at any time during development you want others to have access to
+the feature development, commit your changes and use::
+
+  git flow feature publish
+
 
 Using plain git
 ----------------
@@ -256,36 +270,37 @@ this will assist anyone testing/observing.
 
 .. AvdN, not sure if the username is necessary, that should be traceable
 .. on github
+.. the following is adapted but not completely tested on github
 
 
-example (developer)::
+Example (developer)::
 
-    # git clone git://pyjamas.git.sourceforge.net/gitroot/pyjamas/pyjamas
-    # git config remote.origin.pushurl ssh://<username>@pyjamas.git.sourceforge.net/gitroot/pyjamas/pyjamas
-    # git config remote.origin.push "refs/heads/<username>/*:refs/heads/<username>/*"
-    # git checkout -b <userXZY>/bug/101-default-stylesheet
-    # ...working/commiting/building...
-    # git push
-       (branch get reviewed/tested/accepted)
-    # git checkout master
-    # git pull
-    # git rebase -i <userXZY>/bug/101-default-stylesheet
-       (remove any merge commits)
-    # git push origin master
+    git clone git@github.com:/<your github name or pyjs>/pyjs.git
+    cd pyjs
+    git config remote.origin.push "refs/heads/<username>/*:refs/heads/<username>/*"
+    git checkout -b <username>/bug/101-default-stylesheet
+         ...working/commiting/building...
+    git push
+         (branch get reviewed/tested/accepted)
+    git checkout master
+    git pull
+    git rebase -i <userXZY>/bug/101-default-stylesheet
+        (remove any merge commits)
+    git push origin master
 
-the remote.origin.push config option will enable pushing all your
-branches by default.  when you want to push to master (public), you must
+The remote.origin.push config option will enable pushing all your
+branches by default. When you want to push to master (public), you must
 specify explicitly.
 
-example (user)::
+Example (user)::
 
-    # git clone git://pyjamas.git.sourceforge.net/gitroot/pyjamas/pyjamas
-    # git checkout -b testing <userXYZ>/bug/101-default-stylesheet
-    # git merge master
-    # python bootstrap.py
+    git clone git@github.com:/<your github name or pyjs>/pyjs.git
+    cd pyjs
+    # show the remote branches
+    git branch -a
+    # checkout a remote development branch (or any other remote)
+    # to a local branch named testing
+    git checkout -b testing remotes/origin/develop
+    python bootstrap.py
         (build apps/examples/etc.)
 
-the checkout command will create a new branch, "testing", based off
-the remote branch "<userXZY>/bug/101-default-stylesheet".  you can
-switch between branches (testing different builds) without re-running
-bootstrap.py.  for each new branch, merge "master".
