@@ -200,8 +200,11 @@ that make it as easy to use as git itself, but make git more easy to
 use than without using gitflow. If you have not used git before,
 please take the time to install, learn and use it.
 
-Documenation on gitflow can be found at 
-http://nvie.com/posts/a-successful-git-branching-model/
+The original documenation on gitflow can be found at
+http://nvie.com/posts/a-successful-git-branching-model/, this is
+documentation of the process *without* the gitflow extension, so it
+often shows multiple commands especially for merging and deleting
+temporary branches.
 
 Installation instruction for gitflow can be found on github:
 https://github.com/nvie/gitflow/wiki/Installation for OS X, Linux and
@@ -216,7 +219,26 @@ Checkout the repository from github::
   cd pyjs
   python setupgit.py
 
+If this is on your fresh fork of pyjs on github, you should push the
+development branch using ``git push origin develop``
 
+Working on a feature or bug
+++++++++++++++++++++++++++++
+
+To start working on a feature use the command::
+
+  git flow feature start short_name_for_your_feature
+
+This will create a new branch, and change to that branch. You can now
+edit to your hearths content and use git to add/rename/remove files.
+At any time you can do a ``git commit -a`` to save all your changes.
+Once you are done with the feature, run ``python -m reindent *.py`` on
+any changed python sources and do a final commit using::
+
+  git flow feature finish short_name_for_your_feature
+
+This merges the feature back into the development branch and deletes
+the branch short_name_for_your_feature.
 
 Using plain git
 ----------------
